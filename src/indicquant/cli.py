@@ -353,14 +353,13 @@ def serve(
 
 @app.command()
 def targeting() -> None:
-    """Companies this project is built to walk into."""
-    t = Table(title="Where this artifact is aimed")
-    t.add_column("Company", style="cyan")
-    t.add_column("Why")
-    t.add_row("Sarvam", "Document harness + AutoOpt live loop: mer checkpoint, compile, solve")
-    t.add_row("Microsoft / Azure", "OpenAI tools JSON + locale bind + confirm state machine")
-    t.add_row("OpenAI / Anthropic", "Hard verifier: claims must match tool fields")
-    t.add_row("Cursor / Cognition", "Real tool loop, traces, eval CLI, product UI")
+    """What this project ships."""
+    t = Table(title="IndicQuant")
+    t.add_column("Piece", style="cyan")
+    t.add_column("What")
+    t.add_row("Documents", "Indian paperwork: ingest → extract → validate → JSON")
+    t.add_row("AutoOpt", "Checked loop: mer → compile → solve")
+    t.add_row("Evals", "Golden sets for documents, AutoOpt, and labelled scans")
     console.print(t)
 
 

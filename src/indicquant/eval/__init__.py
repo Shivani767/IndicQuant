@@ -1,1 +1,1 @@
-"""Eval package — scripted, reproducible scoring. Not a live benchmark against Sarvam."""
+"""Eval package — scripted, reproducible scoring against golden sets."""

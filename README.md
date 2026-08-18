@@ -52,7 +52,7 @@ Not a training corpus. Golden sets are the test distribution; adding rows is how
 | Documents | `evals/documents.json` | 12 | hi, ta, native digits, IGST, two-page GST, DL |
 | AutoOpt | `evals/autoopt.json` | 10 | LP, LaTeX, BOBD, equality, joint bounds, compile fail, infeasible |
 | Scans | `evals/scans.json` + `evals/scans/*.png` | 4 | labelled pages + noisy OCR for the small MER |
-| Booking (legacy) | `evals/indic_booking.json` | scripted agent | not the hiring path |
+| Booking (legacy) | `evals/indic_booking.json` | scripted agent | not the main path |
 
 New document rows: `pan_ta`, `pan_hi_digits`, `aadhaar_ta`, `gst_igst_en`, `bank_hi`, `dl_en`.  
 New AutoOpt rows: `opt_eq`, `opt_joint`, `opt_max1d`, `opt_incomplete`, `opt_infeasible`.
@@ -61,7 +61,7 @@ A scanned AutoOpt-11k / real PAN dump would be the next data step. It needs labe
 
 ## Labelled scans → small MER
 
-That is the Sarvam-shaped next layer. Same loop: **mer → compile → solve**. The recogniser is small and checked; it is not 30B weights on a 16 GB Air.
+The next layer is a small checked recogniser on labelled pages. Same loop: **mer → compile → solve**. It is not 30B weights on a 16 GB Air.
 
 | Piece | What shipped | What it is not |
 |---|---|---|
@@ -114,9 +114,9 @@ Compose: `docker compose up --build` → http://127.0.0.1:7861 (do not leave an 
 curl -s http://127.0.0.1:7861/api/jobs -H 'content-type: application/json' -d '{"sample_id":"opt_lp2"}'
 ```
 
-## What still improves this for Sarvam
+## What still improves this
 
-Yes. The loop is the product; the recogniser is the next layer.
+The loop is the product; the recogniser is the next layer.
 
 1. **Real pages** — swap the rendered `evals/scans/*.png` for labelled camera pages. Same `scans.json` schema, same MER.
 2. **A slightly larger MER** — CTC/ONNX on those pages, still emitting LaTeX into M2. Keep compile as the checkpoint.
@@ -124,7 +124,7 @@ Yes. The loop is the product; the recogniser is the next layer.
 4. **A real LP backend** — optional HiGHS/CBC; vertex/BOBD stays the no-dep path.
 5. **Serving** — Compose is Postgres + Redis + API, not K8s/Temporal/GPU.
 
-What we will not do on this laptop: train 393M Nougat, fine-tune 1.3B DeepSeek-Coder, or run Sarvam-30B.
+What we will not do on this laptop: train 393M Nougat or fine-tune 1.3B DeepSeek-Coder.
 
 ## Layout
 
