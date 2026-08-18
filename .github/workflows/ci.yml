@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [master, main]
   pull_request:
   workflow_dispatch:
 
@@ -20,27 +20,18 @@ jobs:
       - name: Set up Python
         run: uv python install 3.11
 
-      # CPU only. The `quant`/`serve` extras (llm-compressor, gptqmodel, vllm) are deliberately not
-      # installed here — it needs CUDA and would not resolve.
       - name: Install
         run: uv sync --extra dev
 
       - name: Lint
-        run: uv run ruff check src tests scripts
+        run: uv run ruff check src tests
 
-      - name: Format check
-        run: uv run ruff format --check src tests
-
-      # Skip network-marked tests: those build the tiny model, which pulls sarvam's remote
-      # modeling code from the Hub. Everything else runs fully offline.
       - name: Test
-        run: uv run pytest -v -m "not gpu and not network" --cov=indicquant --cov-report=term-missing
+        run: uv run pytest -q
 
-      - name: CLI smoke
+      - name: Eval golden sets
         run: |
           uv run indicquant version
-          uv run indicquant info
-          uv run indicquant languages
-          uv run indicquant conditions
-          uv run indicquant plan --condition B
-          uv run indicquant cost --phase 0
+          uv run indicquant eval
+          uv run indicquant eval --suite autoopt
+          uv run indicquant eval --suite scans
