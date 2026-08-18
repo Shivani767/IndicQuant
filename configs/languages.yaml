@@ -1,0 +1,128 @@
+# Language set for IndicQuant.
+#
+# Stratified by resource level, not convenience. Two deliberate structural properties:
+#
+#   1. Hindi/Marathi share Devanagari; Bengali/Assamese share the Bengali script.
+#      This lets us hold script constant while varying language (RQ3).
+#   2. Hinglish/Tanglish are romanized (Latin script), sharing a script with English.
+#      They are the discriminating control for the script confound (ARCHITECTURE.md §6.2).
+#
+# `resource_rank` is an ordinal used for the headline trend plot (1 = highest resource).
+# It encodes the tier ordering only. Replace with measured pretraining shares if Sarvam
+# ever publishes them; until then it is an ordinal and is reported as such.
+
+languages:
+  - code: en
+    name: English
+    script: Latin
+    unicode_blocks: [BASIC_LATIN]
+    tier: control
+    resource_rank: 0
+    flores_code: eng_Latn
+
+  # ---- High resource (among Indic) ----
+  - code: hi
+    name: Hindi
+    script: Devanagari
+    unicode_blocks: [DEVANAGARI, DEVANAGARI_EXTENDED]
+    tier: high
+    resource_rank: 1
+    flores_code: hin_Deva
+
+  - code: bn
+    name: Bengali
+    script: Bengali
+    unicode_blocks: [BENGALI]
+    tier: high
+    resource_rank: 2
+    flores_code: ben_Beng
+
+  # ---- Medium resource ----
+  - code: ta
+    name: Tamil
+    script: Tamil
+    unicode_blocks: [TAMIL, TAMIL_SUPPLEMENT]
+    tier: medium
+    resource_rank: 3
+    flores_code: tam_Taml
+
+  - code: te
+    name: Telugu
+    script: Telugu
+    unicode_blocks: [TELUGU]
+    tier: medium
+    resource_rank: 4
+    flores_code: tel_Telu
+
+  - code: mr
+    name: Marathi
+    script: Devanagari      # shares script with Hindi — script/language control
+    unicode_blocks: [DEVANAGARI, DEVANAGARI_EXTENDED]
+    tier: medium
+    resource_rank: 5
+    flores_code: mar_Deva
+
+  - code: gu
+    name: Gujarati
+    script: Gujarati
+    unicode_blocks: [GUJARATI]
+    tier: medium
+    resource_rank: 6
+    flores_code: guj_Gujr
+
+  # ---- Low resource ----
+  - code: kn
+    name: Kannada
+    script: Kannada
+    unicode_blocks: [KANNADA]
+    tier: low
+    resource_rank: 7
+    flores_code: kan_Knda
+
+  - code: pa
+    name: Punjabi
+    script: Gurmukhi
+    unicode_blocks: [GURMUKHI]
+    tier: low
+    resource_rank: 8
+    flores_code: pan_Guru
+
+  - code: or
+    name: Odia
+    script: Odia
+    unicode_blocks: [ORIYA]
+    tier: low
+    resource_rank: 9
+    flores_code: ory_Orya
+
+  - code: as
+    name: Assamese
+    script: Bengali         # shares script with Bengali — script/language control
+    unicode_blocks: [BENGALI]
+    tier: low
+    resource_rank: 10
+    flores_code: asm_Beng
+
+  # ---- Code-mixed, romanized (Latin script) ----
+  # H4: expected to degrade worst — underrepresented in both English and formal-Indic
+  # calibration sets, yet it is how Indians actually type.
+  - code: hi_en
+    name: Hinglish (romanized)
+    script: Latin
+    unicode_blocks: [BASIC_LATIN]
+    tier: code_mixed
+    resource_rank: 11
+    base_language: hi
+    flores_code: null       # constructed; no FLORES equivalent
+
+  - code: ta_en
+    name: Tanglish (romanized)
+    script: Latin
+    unicode_blocks: [BASIC_LATIN]
+    tier: code_mixed
+    resource_rank: 12
+    base_language: ta
+    flores_code: null
+
+# Phase 0 pilot subset — one language per tier plus the control.
+phase0_subset: [en, hi, ta, or, hi_en]

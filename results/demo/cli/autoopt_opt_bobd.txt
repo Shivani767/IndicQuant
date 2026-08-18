@@ -1,0 +1,14 @@
+8439a430a2ad  autoopt  0.28ms  ok=True
+  ingest           0.0 ms  ok
+  preprocess       0.0 ms  ok
+  mer              0.0 ms  ok
+  compile         0.17 ms  ok
+  validate         0.0 ms  ok
+  solve           0.11 ms  ok
+  method=bobd-grid  objective=-1.0  x={'p': 0.0, 'q': 1.0}
+M1 checkpoint (LaTeX/text)
+minimize p - q^2
+subject to
+p + q <= 1
+p >= 0
+q >= 0

@@ -1,0 +1,27 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Artifacts — regenerate, never commit.
+results/**/*.parquet
+results/**/*.jsonl
+results/**/*.npz
+checkpoints/
+models/
+data/
+*.safetensors
+*.gguf
+
+# Plots and tables ARE committed (they are the deliverable), except scratch runs.
+results/scratch/
+
+.DS_Store
+.env

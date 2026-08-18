@@ -1,0 +1,94 @@
+{
+    "suite": "autoopt",
+    "cases": 5,
+    "task_completion_rate": 1.0,
+    "field_accuracy_mean": 1.0,
+    "latency_ms_mean": 0.22,
+    "scores": [
+        {
+            "id": "opt_lp2",
+            "ok": true,
+            "doc_type": "autoopt",
+            "field_accuracy": 1.0,
+            "latency_ms": 0.08,
+            "method": "vertex-lp",
+            "errors": [],
+            "stages": [
+                "ingest",
+                "preprocess",
+                "mer",
+                "compile",
+                "validate",
+                "solve"
+            ]
+        },
+        {
+            "id": "opt_diet",
+            "ok": true,
+            "doc_type": "autoopt",
+            "field_accuracy": 1.0,
+            "latency_ms": 0.04,
+            "method": "vertex-lp",
+            "errors": [],
+            "stages": [
+                "ingest",
+                "preprocess",
+                "mer",
+                "compile",
+                "validate",
+                "solve"
+            ]
+        },
+        {
+            "id": "opt_latex",
+            "ok": true,
+            "doc_type": "autoopt",
+            "field_accuracy": 1.0,
+            "latency_ms": 0.03,
+            "method": "vertex-lp",
+            "errors": [],
+            "stages": [
+                "ingest",
+                "preprocess",
+                "mer",
+                "compile",
+                "validate",
+                "solve"
+            ]
+        },
+        {
+            "id": "opt_bobd",
+            "ok": true,
+            "doc_type": "autoopt",
+            "field_accuracy": 1.0,
+            "latency_ms": 0.15,
+            "method": "bobd-grid",
+            "errors": [],
+            "stages": [
+                "ingest",
+                "preprocess",
+                "mer",
+                "compile",
+                "validate",
+                "solve"
+            ]
+        },
+        {
+            "id": "opt_bobd3",
+            "ok": true,
+            "doc_type": "autoopt",
+            "field_accuracy": 1.0,
+            "latency_ms": 0.81,
+            "method": "bobd-grid",
+            "errors": [],
+            "stages": [
+                "ingest",
+                "preprocess",
+                "mer",
+                "compile",
+                "validate",
+                "solve"
+            ]
+        }
+    ]
+}

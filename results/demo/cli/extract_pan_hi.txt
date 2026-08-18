@@ -1,0 +1,29 @@
+62c18cfb945d  pan  0.06ms  ok=True
+  ingest           0.0 ms
+  split            0.0 ms
+  preprocess      0.01 ms
+  infer           0.05 ms
+  validate         0.0 ms
+  assemble         0.0 ms
+{
+  "doc_type": "pan",
+  "title": "PAN card",
+  "fields": {
+    "pan": "ABCDE1234F",
+    "name": "रवि कुमार",
+    "father_name": "सुरेश कुमार",
+    "dob": "12/03/1994"
+  },
+  "confidence": {
+    "pan": 1.0,
+    "name": 1.0,
+    "father_name": 1.0,
+    "dob": 1.0
+  },
+  "validation": {
+    "ok": true,
+    "missing": [],
+    "errors": []
+  },
+  "pages": 1
+}

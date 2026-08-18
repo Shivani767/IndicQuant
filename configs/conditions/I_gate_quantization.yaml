@@ -1,0 +1,65 @@
+# Condition I — quantize the router gate vs. preserve it in FP16. NOT IN THE ORIGINAL SPEC.
+#
+# WHY THIS EXISTS (ARCHITECTURE.md §2.2):
+#
+# Routing can drift by two distinct paths:
+#
+#   (1) DIRECT   — the gate matrix itself is quantized, so router logits are computed with
+#                  degraded weights.
+#   (2) INDIRECT — the gate is untouched, but the MoE block at layer L feeds layer L+1's
+#                  router. Quantization error in expert weights propagates into router
+#                  INPUTS, so routing shifts even with a perfectly preserved gate.
+#
+# Conditions B-G preserve the gate by default, so any drift they show is purely path (2).
+# Flipping the gate into the quantized set isolates path (1) by difference.
+#
+# WHY IT MATTERS PRACTICALLY: the gate is 128x4096 per layer across 18 layers — about 9.4M
+# parameters, or 0.03% of the model. Preserving it is free. If preservation measurably
+# recovers routing agreement, the recommendation is immediate, universal to MoE
+# quantization, and costs nothing. That is a systems-venue result.
+
+id: I
+name: gate_quantization_ablation
+method: awq
+bits: 4
+
+model: sarvam-30b
+backend: llmcompressor
+
+quantization:
+  scheme: W4A16
+  group_size: 128
+  symmetric: true
+  targets: [Linear]
+  calibrate_all_experts: true
+
+# The 2x2: {English, Indic} calibration x {gate preserved, gate quantized}.
+grid:
+  calibration: [english_c4, indic_sangraha]
+  quantize_gate: [false, true]
+
+# ignore-list per grid cell. quantize_gate=false is the B/E default.
+ignore_variants:
+  gate_preserved:
+    - lm_head
+    - "re:.*mlp.gate$"
+    - "re:.*shared_experts.*"
+  gate_quantized:
+    - lm_head
+    - "re:.*shared_experts.*"    # gate omitted → it gets quantized
+
+reuse_checkpoints:
+  - match: {calibration: english_c4, quantize_gate: false}
+    condition: B
+  - match: {calibration: indic_sangraha, quantize_gate: false}
+    condition: E
+
+role: "NEW. Separates direct gate perturbation from indirect upstream activation error."
+compare_against: [A, B, E]
+answers: [RQ4]
+
+capture_routing: true
+
+# Headline metric for this condition is routing agreement, not accuracy: the question is
+# where drift comes from, and accuracy is too downstream to attribute cleanly.
+primary_metric: topk_agreement

@@ -1,0 +1,154 @@
+{
+    "id": "404a302f0245",
+    "status": "done",
+    "created_at": "2026-08-18T18:38:58+00:00",
+    "input": {
+        "sample_id": "opt_latex",
+        "pages": 0,
+        "pipeline": "autoopt"
+    },
+    "ok": true,
+    "doc_type": "autoopt",
+    "result": {
+        "doc_type": "autoopt",
+        "title": "AutoOpt (arXiv:2510.21436) harness",
+        "latex": "\\min 3x + 2y\ns.t. x + y \\ge 4\nx \\ge 0\ny \\ge 0",
+        "program": {
+            "sense": "min",
+            "objective": {
+                "x": 3.0,
+                "y": 2.0
+            },
+            "quadratic": {},
+            "constraints": [
+                {
+                    "coeffs": {
+                        "x": 1.0,
+                        "y": 1.0
+                    },
+                    "op": ">=",
+                    "rhs": 4.0
+                },
+                {
+                    "coeffs": {
+                        "x": 1.0
+                    },
+                    "op": ">=",
+                    "rhs": 0.0
+                },
+                {
+                    "coeffs": {
+                        "y": 1.0
+                    },
+                    "op": ">=",
+                    "rhs": 0.0
+                }
+            ],
+            "variables": [
+                "x",
+                "y"
+            ],
+            "latex": "\\min 3x + 2y\ns.t. x + y \\ge 4\nx \\ge 0\ny \\ge 0"
+        },
+        "solution": {
+            "x": {
+                "x": -0.0,
+                "y": 4.0
+            },
+            "objective": 8.0,
+            "status": "optimal",
+            "method": "vertex-lp",
+            "vertices_tested": 2
+        },
+        "validation": {
+            "ok": true,
+            "retried": false,
+            "checkpoint": "latex \u2192 structured program"
+        },
+        "pages": 1
+    },
+    "stages": [
+        {
+            "name": "ingest",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "pages": 1,
+                "chars": 45,
+                "has_image": false,
+                "source": "text"
+            }
+        },
+        {
+            "name": "preprocess",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "deskew": "identity",
+                "note": "text path skips image preprocess"
+            }
+        },
+        {
+            "name": "mer",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "latex": "\\min 3x + 2y\ns.t. x + y \\ge 4\nx \\ge 0\ny \\ge 0",
+                "source": "text",
+                "chars": 45
+            }
+        },
+        {
+            "name": "compile",
+            "ok": true,
+            "ms": 0.04,
+            "detail": {
+                "sense": "min",
+                "variables": [
+                    "x",
+                    "y"
+                ],
+                "constraints": 3,
+                "quadratic": [],
+                "retried": false
+            }
+        },
+        {
+            "name": "validate",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "ok": true,
+                "retried": false,
+                "checkpoint": "latex \u2192 structured program"
+            }
+        },
+        {
+            "name": "solve",
+            "ok": true,
+            "ms": 0.01,
+            "detail": {
+                "status": "optimal",
+                "method": "vertex-lp",
+                "objective": 8.0,
+                "x": {
+                    "x": -0.0,
+                    "y": 4.0
+                }
+            }
+        }
+    ],
+    "latency_ms": 0.05,
+    "cost": {
+        "unit": "cpu_ms",
+        "total": 0.05,
+        "by_stage": {
+            "ingest": 0.0,
+            "preprocess": 0.0,
+            "mer": 0.0,
+            "compile": 0.04,
+            "validate": 0.0,
+            "solve": 0.01
+        }
+    }
+}

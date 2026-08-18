@@ -1,0 +1,73 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/>
+<title>IndicQuant test + live outputs</title>
+<style>
+  body { margin:0; font: 14px/1.45 ui-sans-serif, system-ui; background:#12141a; color:#e8ecf4; }
+  header { padding:18px 24px; border-bottom:1px solid #2c3344; background:#0e1016; }
+  h1 { font-size:18px; margin:0 0 6px; }
+  .meta { color:#8b93a7; font: 12px ui-monospace, monospace; }
+  main { padding:20px 24px 40px; display:grid; gap:22px; }
+  h2 { font-size:13px; letter-spacing:.12em; color:#8b93a7; margin:0 0 10px; font-family: ui-monospace, monospace; }
+  table { width:100%; border-collapse:collapse; font: 12px ui-monospace, monospace; }
+  th, td { text-align:left; padding:8px 10px; border-bottom:1px solid #2c3344; vertical-align:top; }
+  th { color:#8b93a7; font-weight:600; }
+  .ok { color:#3dd68c; }
+  .kpi { display:flex; gap:16px; flex-wrap:wrap; }
+  .kpi div { background:#1b1e27; border:1px solid #2c3344; border-radius:12px; padding:12px 16px; min-width:140px; }
+  .kpi b { display:block; color:#3dd68c; font-size:22px; }
+  pre { background:#0e1016; border:1px solid #2c3344; border-radius:12px; padding:12px; font-size:12px; overflow:auto; }
+  code { color:#7aa2f7; }
+</style></head>
+<body>
+<header>
+  <h1>IndicQuant — pytest + live Docker outputs</h1>
+  <div class="meta">http://127.0.0.1:7861 · v0.8.0 · store=postgres · postgres=True · redis=True</div>
+</header>
+<main>
+  <section>
+    <h2>KPIS (LIVE)</h2>
+    <div class="kpi">
+      <div><b>46</b>pytest passed</div>
+      <div><b>1.0</b>document field accuracy</div>
+      <div><b>1.0</b>autoopt accuracy</div>
+      <div><b>1.0</b>doc jobs ok</div>
+      <div><b>1.0</b>autoopt jobs ok</div>
+    </div>
+  </section>
+  <section>
+    <h2>PYTEST</h2>
+    <pre>..............................................                           [100%]
+46 passed in 1.62s</pre>
+  </section>
+  <section>
+    <h2>EVAL DOCUMENTS (GOLDEN SET)</h2>
+    <table>
+      <tr><th>id</th><th>ok</th><th>type</th><th>fields</th><th>ms</th><th>errors</th></tr>
+      <tr><td>pan_hi</td><td class='ok'>yes</td><td>pan</td><td>1.0</td><td>0.19</td><td>—</td></tr>
+<tr><td>aadhaar_hi</td><td class='ok'>yes</td><td>aadhaar</td><td>1.0</td><td>0.06</td><td>—</td></tr>
+<tr><td>gst_invoice_en</td><td class='ok'>yes</td><td>gst_invoice</td><td>1.0</td><td>0.06</td><td>—</td></tr>
+<tr><td>bank_en</td><td class='ok'>yes</td><td>bank_statement</td><td>1.0</td><td>0.05</td><td>—</td></tr>
+<tr><td>insurance_en</td><td class='ok'>yes</td><td>insurance</td><td>1.0</td><td>0.03</td><td>—</td></tr>
+<tr><td>gst_two_page</td><td class='ok'>yes</td><td>gst_invoice</td><td>1.0</td><td>0.13</td><td>—</td></tr>
+    </table>
+  </section>
+  <section>
+    <h2>EVAL AUTOOPT</h2>
+    <table>
+      <tr><th>id</th><th>ok</th><th>type</th><th>fields</th><th>ms</th><th>method</th><th>errors</th></tr>
+      <tr><td>opt_lp2</td><td class='ok'>yes</td><td>autoopt</td><td>1.0</td><td>0.08</td><td>vertex-lp</td><td>—</td></tr>
+<tr><td>opt_diet</td><td class='ok'>yes</td><td>autoopt</td><td>1.0</td><td>0.04</td><td>vertex-lp</td><td>—</td></tr>
+<tr><td>opt_latex</td><td class='ok'>yes</td><td>autoopt</td><td>1.0</td><td>0.03</td><td>vertex-lp</td><td>—</td></tr>
+<tr><td>opt_bobd</td><td class='ok'>yes</td><td>autoopt</td><td>1.0</td><td>0.15</td><td>bobd-grid</td><td>—</td></tr>
+<tr><td>opt_bobd3</td><td class='ok'>yes</td><td>autoopt</td><td>1.0</td><td>0.81</td><td>bobd-grid</td><td>—</td></tr>
+    </table>
+  </section>
+  <section>
+    <h2>LIVE POST /api/jobs ON 7861</h2>
+    <table>
+      <tr><th>sample</th><th>ok</th><th>type</th><th>ms</th><th>output</th><th>obj</th></tr>
+      <tr><td>aadhaar_hi</td><td class='ok'>True</td><td>aadhaar</td><td>0.04</td><td><code>{"aadhaar": "9999 1111 2222", "name": "अनिता शर्मा", "dob": "15/08/1990", "gender": "F"}</code></td><td></td></tr><tr><td>bank_en</td><td class='ok'>True</td><td>bank_statement</td><td>0.04</td><td><code>{"bank": "State Bank of India SAMPLE statement", "ifsc": "SBIN0001234", "account": "12345678901", "period": "Jul 2026", "opening": 50000.0, "closing": 42350.0}</code></td><td></td></tr><tr><td>gst_invoice_en</td><td class='ok'>True</td><td>gst_invoice</td><td>0.04</td><td><code>{"gstin": "27ABCDE1234F1Z5", "invoice_no": "INV-1042", "date": "01/08/2026", "bill_to": "Tata Capital SAMPLE", "taxable": 10000.0, "cgst": 900.0, "sgst": 900.0, "total": 11800.0}</code></td><td></td></tr><tr><td>gst_two_page</td><td class='ok'>True</td><td>gst_invoice</td><td>0.08</td><td><code>{"gstin": "29AAAAA0000A1Z5", "invoice_no": "INV-77", "date": "18/08/2026", "bill_to": "CRED SAMPLE", "taxable": 2000.0, "cgst": 180.0, "sgst": 180.0, "total": 2360.0}</code></td><td></td></tr><tr><td>insurance_en</td><td class='ok'>True</td><td>insurance</td><td>0.03</td><td><code>{"insurer": "SBI Life SAMPLE", "policy_no": "12AB345678", "premium": 24000.0, "sum_assured": 1000000.0}</code></td><td></td></tr><tr><td>opt_bobd</td><td class='ok'>True</td><td>autoopt</td><td>0.21</td><td><code>{"p": 0.0, "q": 1.0}</code></td><td>-1.0</td></tr><tr><td>opt_bobd3</td><td class='ok'>True</td><td>autoopt</td><td>0.79</td><td><code>{"x": 3.0, "y": 0.0, "z": 0.0}</code></td><td>3.0</td></tr><tr><td>opt_diet</td><td class='ok'>True</td><td>autoopt</td><td>0.06</td><td><code>{"x": 3.333333, "y": 1.333333}</code></td><td>273.333333</td></tr><tr><td>opt_latex</td><td class='ok'>True</td><td>autoopt</td><td>0.05</td><td><code>{"x": -0.0, "y": 4.0}</code></td><td>8.0</td></tr><tr><td>opt_lp2</td><td class='ok'>True</td><td>autoopt</td><td>0.06</td><td><code>{"x": 2.0, "y": 3.0}</code></td><td>18.0</td></tr><tr><td>pan_hi</td><td class='ok'>True</td><td>pan</td><td>0.06</td><td><code>{"pan": "ABCDE1234F", "name": "रवि कुमार", "father_name": "सुरेश कुमार", "dob": "12/03/1994"}</code></td><td></td></tr>
+    </table>
+  </section>
+</main>
+</body></html>

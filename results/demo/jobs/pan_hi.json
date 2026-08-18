@@ -1,0 +1,105 @@
+{
+    "id": "58a191099ca6",
+    "status": "done",
+    "created_at": "2026-08-18T18:38:57+00:00",
+    "input": {
+        "sample_id": "pan_hi",
+        "pages": 1,
+        "pipeline": null
+    },
+    "ok": true,
+    "doc_type": "pan",
+    "result": {
+        "doc_type": "pan",
+        "title": "PAN card",
+        "fields": {
+            "pan": "ABCDE1234F",
+            "name": "\u0930\u0935\u093f \u0915\u0941\u092e\u093e\u0930",
+            "father_name": "\u0938\u0941\u0930\u0947\u0936 \u0915\u0941\u092e\u093e\u0930",
+            "dob": "12/03/1994"
+        },
+        "confidence": {
+            "pan": 1.0,
+            "name": 1.0,
+            "father_name": 1.0,
+            "dob": 1.0
+        },
+        "validation": {
+            "ok": true,
+            "missing": [],
+            "errors": []
+        },
+        "pages": 1
+    },
+    "stages": [
+        {
+            "name": "ingest",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "pages": 1,
+                "chars": 189
+            }
+        },
+        {
+            "name": "split",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "fanout": 1
+            }
+        },
+        {
+            "name": "preprocess",
+            "ok": true,
+            "ms": 0.01,
+            "detail": {
+                "script": [
+                    "Devanagari"
+                ],
+                "deskew": "identity"
+            }
+        },
+        {
+            "name": "infer",
+            "ok": true,
+            "ms": 0.05,
+            "detail": {
+                "doc_type": "pan",
+                "pages": 1
+            }
+        },
+        {
+            "name": "validate",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "ok": true,
+                "missing": [],
+                "errors": []
+            }
+        },
+        {
+            "name": "assemble",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "fields": 4,
+                "ok": true
+            }
+        }
+    ],
+    "latency_ms": 0.06,
+    "cost": {
+        "unit": "cpu_ms",
+        "total": 0.06,
+        "by_stage": {
+            "ingest": 0.0,
+            "split": 0.0,
+            "preprocess": 0.01,
+            "infer": 0.05,
+            "validate": 0.0,
+            "assemble": 0.0
+        }
+    }
+}

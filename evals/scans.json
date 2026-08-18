@@ -1,0 +1,34 @@
+[
+  {
+    "id": "scan_opt_lp2",
+    "sample": "opt_lp2",
+    "image": "opt_lp2.png",
+    "gold": "maximize 3*x + 4*y\nsubject to\nx + 2*y <= 8\n3*x + y <= 9\nx >= 0\ny >= 0",
+    "ocr_noise": "maxlmize 3*x + 4*y\nsubject to\nx + 2*y ≤ 8\n3*x + y <= 9\nx >= 0\ny >= 0",
+    "expected": {"objective": 18.0, "x": {"x": 2.0, "y": 3.0}}
+  },
+  {
+    "id": "scan_opt_diet",
+    "sample": "opt_diet",
+    "image": "opt_diet.png",
+    "gold": "minimize 50*x + 80*y\nsubject to\n2*x + y >= 8\nx + 2*y >= 6\nx >= 0\ny >= 0",
+    "ocr_noise": "minlmize 50*x + 80*y\nsubj to\n2*x + y ≥ 8\nx + 2*y >= 6\nx >= 0\ny >= 0",
+    "expected": {"objective": 273.333333, "x": {"x": 3.333333, "y": 1.333333}}
+  },
+  {
+    "id": "scan_opt_latex",
+    "sample": "opt_latex",
+    "image": "opt_latex.png",
+    "gold": "\\min 3x + 2y\ns.t. x + y \\ge 4\nx \\ge 0\ny \\ge 0",
+    "ocr_noise": "min 3x + 2y\ns t x + y ≥ 4\nx ≥ 0\ny ≥ 0",
+    "expected": {"objective": 8.0, "x": {"x": 0.0, "y": 4.0}}
+  },
+  {
+    "id": "scan_opt_bobd",
+    "sample": "opt_bobd",
+    "image": "opt_bobd.png",
+    "gold": "minimize p - q^2\nsubject to\np + q <= 1\np >= 0\nq >= 0",
+    "ocr_noise": "minimize p - q^2\nsubject to\np + q le 1\np >= 0\nq >= 0",
+    "expected": {"objective": -1.0, "x": {"p": 0.0, "q": 1.0}}
+  }
+]

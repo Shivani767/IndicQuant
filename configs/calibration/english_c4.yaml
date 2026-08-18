@@ -1,0 +1,25 @@
+# Condition B/C/D/G calibration: English. This is standard practice — the thing we claim
+# is wrong for Indic models.
+
+name: english_c4
+description: "English-only calibration, the near-universal default (C4)"
+
+# HARD INVARIANT: token_budget and seq_len are identical across english_c4, indic_sangraha,
+# mixed and codemixed. Only the DISTRIBUTION varies. Enforced by tests/test_calib_budget.py.
+# Without this, the headline B-vs-E comparison confounds distribution with volume.
+token_budget: 1048576            # 512 sequences x 2048 tokens
+seq_len: 2048
+seed: 0
+
+sources:
+  - hf_id: allenai/c4
+    config: en
+    split: train
+    text_field: text
+    weight: 1.0
+    language: en
+
+filters:
+  min_chars: 200
+  max_chars: 100000
+  dedup: exact                   # exact-hash dedup; near-dup is overkill at this budget

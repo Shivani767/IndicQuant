@@ -1,0 +1,93 @@
+[
+  {
+    "id": "hi-book-bom-del",
+    "query": "मुंबई से दिल्ली के लिए 2 टिकट बुक करो",
+    "language": "hi",
+    "script": [
+      {"tool": "book_ticket", "args": {"origin": "मुंबई", "destination": "दिल्ली", "passengers": 2}},
+      {"reply": "2 टिकट बुक हो गई PNR BOMDEL02"}
+    ],
+    "expect": {
+      "intent": "book",
+      "bind_origin": "BOM",
+      "bind_dest": "DEL",
+      "reply_contains": ["BOMDEL02"],
+      "grounded": true
+    }
+  },
+  {
+    "id": "hi_en-book-maa",
+    "query": "chennai se mumbai ke liye 1 ticket book karo",
+    "language": "hi_en",
+    "script": [
+      {"tool": "book_ticket", "args": {"origin": "chennai", "destination": "mumbai", "passengers": 1}},
+      {"reply": "booked MAA->BOM PNR MAABOM01"}
+    ],
+    "expect": {
+      "intent": "book",
+      "bind_origin": "MAA",
+      "bind_dest": "BOM",
+      "reply_contains": ["MAABOM01"],
+      "grounded": true
+    }
+  },
+  {
+    "id": "ta-book",
+    "query": "சென்னை முதல் தில்லி வரை 1 டிக்கட்",
+    "language": "ta",
+    "script": [
+      {"tool": "book_ticket", "args": {"origin": "சென்னை", "destination": "दिल्ली", "passengers": 1}},
+      {"reply": "PNR MAADEL01"}
+    ],
+    "expect": {
+      "bind_origin": "MAA",
+      "reply_contains": ["MAADEL01"],
+      "grounded": true
+    }
+  },
+  {
+    "id": "hi-gst-honest",
+    "query": "500 रुपये पर 18 प्रतिशत GST कितना?",
+    "language": "hi",
+    "script": [
+      {"tool": "inr_gst", "args": {"amount": "500", "rate": "18"}},
+      {"reply": "कुल 590 रुपये"}
+    ],
+    "expect": {
+      "intent": "gst",
+      "reply_contains": ["590"],
+      "grounded": true
+    }
+  },
+  {
+    "id": "hi-gst-hallucination",
+    "query": "500 पर 18 प्रतिशत कर",
+    "language": "hi",
+    "script": [
+      {"tool": "calculator", "args": {"expr": "500 + 500*18/100"}},
+      {"reply": "कुल 999 रुपये है।"},
+      {"reply": "कुल 590 रुपये है।"}
+    ],
+    "expect": {
+      "hallucination_caught": true,
+      "reply_contains": ["590"],
+      "reply_excludes": ["999"],
+      "grounded": true
+    }
+  },
+  {
+    "id": "ambiguous-city-order",
+    "query": "दिल्ली से मुंबई 3 टिकट",
+    "language": "hi",
+    "script": [
+      {"tool": "book_ticket", "args": {"origin": "दिल्ली", "destination": "मुंबई", "passengers": 3}},
+      {"reply": "PNR DELBOM03"}
+    ],
+    "expect": {
+      "bind_origin": "DEL",
+      "bind_dest": "BOM",
+      "reply_contains": ["DELBOM03"],
+      "grounded": true
+    }
+  }
+]

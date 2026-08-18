@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>IndicQuant — document + AutoOpt harness</title>
+<style>
+  :root {
+    --bg: #12141a; --panel: #1b1e27; --ink: #e8ecf4; --muted: #8b93a7;
+    --line: #2c3344; --ok: #3dd68c; --accent: #7aa2f7; --warn: #e8a54b;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    background: var(--bg); color: var(--ink);
+    display: grid; grid-template-rows: 52px 1fr;
+  }
+  header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 0 16px; border-bottom: 1px solid var(--line); background: #0e1016;
+  }
+  header strong { font-size: 15px; }
+  header span { margin-left: auto; color: var(--muted); font-size: 12px; }
+  .app { display: grid; grid-template-columns: 260px 1fr 340px; min-height: 0; }
+  aside, .rail { overflow: auto; padding: 14px; background: var(--panel); }
+  aside { border-right: 1px solid var(--line); }
+  .rail { border-left: 1px solid var(--line); }
+  main { display: flex; flex-direction: column; min-height: 0; }
+  .kicker {
+    font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .14em;
+    color: var(--muted); margin: 0 0 10px;
+  }
+  .sample, .ghost {
+    display: block; width: 100%; text-align: left; cursor: pointer;
+    background: #151821; border: 1px solid var(--line); color: var(--ink);
+    border-radius: 10px; padding: 10px; margin-bottom: 8px; font-size: 13px;
+  }
+  .sample small { display: block; color: var(--muted); margin-top: 4px; }
+  .sample.on { border-color: var(--accent); }
+  #ocr {
+    flex: 1; margin: 16px; padding: 14px; background: #0e1016;
+    border: 1px solid var(--line); border-radius: 12px; color: var(--ink);
+    font: 13px/1.5 ui-monospace, monospace; resize: none;
+  }
+  .bar { padding: 0 16px 16px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .bar button {
+    background: var(--ok); color: #062113; border: 0; border-radius: 10px;
+    padding: 10px 16px; font-weight: 700; cursor: pointer;
+  }
+  .bar button:disabled { opacity: .5; }
+  .bar label { color: var(--muted); font-size: 12px; cursor: pointer; }
+  .stage {
+    display: flex; justify-content: space-between; gap: 8px;
+    font: 12px ui-monospace, monospace; padding: 8px 0;
+    border-bottom: 1px solid #232838; color: var(--muted);
+  }
+  .stage .n { color: var(--accent); }
+  .stage.ok .ms { color: var(--ok); }
+  pre.json {
+    background: #0e1016; border: 1px solid var(--line); border-radius: 10px;
+    padding: 10px; font-size: 12px; overflow: auto; max-height: 46vh;
+    white-space: pre-wrap;
+  }
+  .score { font: 12px ui-monospace, monospace; color: var(--muted); margin-bottom: 12px; }
+  .score b { color: var(--ok); }
+  .err { color: #f07178; padding: 8px 16px; }
+  .hint { color: var(--muted); font-size: 12px; padding: 0 16px; }
+</style>
+</head>
+<body>
+<header>
+  <strong>Document + AutoOpt harness</strong>
+  <span id="meta">ingest → mer → compile → solve</span>
+</header>
+<div class="app">
+  <aside>
+    <p class="kicker">DOCUMENTS</p>
+    <div id="samples"></div>
+    <p class="kicker">AUTOOPT</p>
+    <div id="opt-samples"></div>
+    <p class="kicker">EVAL</p>
+    <div class="score" id="eval">loading…</div>
+    <div class="score" id="eval-opt"></div>
+  </aside>
+  <main>
+    <p class="hint" id="hint">Indian documents → JSON, or paste a min/max formulation (AutoOpt M1 checkpoint) and solve.</p>
+    <textarea id="ocr" placeholder="Paste a PAN / GST page, or: maximize 3*x + 4*y …"></textarea>
+    <div class="bar">
+      <button type="button" id="run">Run</button>
+      <label>image <input type="file" id="img" accept="image/*"/></label>
+      <span id="status" class="hint"></span>
+    </div>
+    <div id="err" class="err" hidden></div>
+  </main>
+  <div class="rail">
+    <p class="kicker">STAGES</p>
+    <div id="stages"></div>
+    <p class="kicker">CHECKPOINT / JSON</p>
+    <pre class="json" id="out">{}</pre>
+  </div>
+</div>
+<script>
+const ocr = document.getElementById("ocr");
+const err = document.getElementById("err");
+const run = document.getElementById("run");
+const img = document.getElementById("img");
+let sampleId = null;
+let pipeline = null;
+let imageB64 = null;
+
+async function api(path, opts) {
+  const res = await fetch(path, opts);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || res.statusText);
+  return data;
+}
+
+function showJob(job) {
+  const sol = (job.result || {}).solution;
+  document.getElementById("status").textContent =
+    (job.doc_type || "") + " · " + (job.latency_ms || 0) + " ms · " + (job.ok ? "ok" : "failed")
+    + (sol ? " · obj " + sol.objective : "");
+  const box = document.getElementById("stages");
+  box.innerHTML = "";
+  (job.stages || []).forEach(s => {
+    const d = document.createElement("div");
+    d.className = "stage" + (s.ok ? " ok" : "");
+    d.innerHTML = `<span class="n">${s.name}</span><span class="ms">${s.ms} ms</span>`;
+    box.appendChild(d);
+  });
+  const mer = job.stages && job.stages.find(s => s.name === "mer");
+  const payload = job.result || job;
+  document.getElementById("out").textContent = JSON.stringify({
+    latex: payload.latex || (mer && mer.detail && mer.detail.latex),
+    program: payload.program,
+    solution: payload.solution,
+    fields: payload.fields,
+    validation: payload.validation
+  }, null, 2);
+}
+
+async function extract() {
+  err.hidden = true;
+  run.disabled = true;
+  try {
+    let body;
+    if (sampleId) body = { sample_id: sampleId };
+    else if (imageB64) body = { pipeline: "autoopt", image_b64: imageB64, text: ocr.value };
+    else body = { text: ocr.value, pipeline: pipeline || undefined };
+    const job = await api("/api/jobs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    sampleId = null;
+    showJob(job);
+  } catch (e) {
+    err.hidden = false;
+    err.textContent = e.message;
+  } finally {
+    run.disabled = false;
+  }
+}
+
+function addSamples(box, list, kind) {
+  list.forEach(s => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "sample";
+    b.innerHTML = `${s.id}<small>${s.doc_type} · ${s.language}</small>`;
+    b.onclick = () => {
+      sampleId = s.id;
+      pipeline = s.pipeline === "autoopt" ? "autoopt" : null;
+      imageB64 = null;
+      img.value = "";
+      ocr.value = s.text || s.preview || "";
+      run.textContent = kind === "autoopt" ? "Solve" : "Extract";
+      [...document.getElementById("samples").children].forEach(x => x.classList.remove("on"));
+      [...document.getElementById("opt-samples").children].forEach(x => x.classList.remove("on"));
+      b.classList.add("on");
+    };
+    box.appendChild(b);
+  });
+}
+
+img.addEventListener("change", () => {
+  const file = img.files && img.files[0];
+  if (!file) { imageB64 = null; return; }
+  const reader = new FileReader();
+  reader.onload = () => {
+    const s = String(reader.result || "");
+    imageB64 = s.includes(",") ? s.split(",")[1] : s;
+    sampleId = null;
+    pipeline = "autoopt";
+    run.textContent = "Solve";
+  };
+  reader.readAsDataURL(file);
+});
+
+(async () => {
+  const meta = await api("/api/meta");
+  document.getElementById("meta").textContent =
+    "docs " + (meta.loop || []).join(" → ") + " · autoopt " + (meta.autoopt_loop || []).join(" → ") + " · v" + meta.version;
+  const docs = (meta.samples || []).filter(s => s.pipeline !== "autoopt");
+  const opts = (meta.samples || []).filter(s => s.pipeline === "autoopt");
+  addSamples(document.getElementById("samples"), docs, "docs");
+  addSamples(document.getElementById("opt-samples"), opts, "autoopt");
+  api("/api/eval").then(ev => {
+    document.getElementById("eval").innerHTML =
+      `docs fields <b>${ev.field_accuracy_mean}</b> · jobs <b>${ev.task_completion_rate}</b>`;
+  }).catch(() => { document.getElementById("eval").textContent = "eval unavailable"; });
+  api("/api/eval/autoopt").then(ev => {
+    document.getElementById("eval-opt").innerHTML =
+      `autoopt <b>${ev.field_accuracy_mean}</b> · jobs <b>${ev.task_completion_rate}</b>`;
+  }).catch(() => {});
+})().catch(e => { err.hidden = false; err.textContent = e.message; });
+
+run.onclick = extract;
+ocr.addEventListener("input", () => { sampleId = null; });
+</script>
+</body>
+</html>

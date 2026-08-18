@@ -1,0 +1,162 @@
+{
+    "id": "c5cfaf8c12ef",
+    "status": "done",
+    "created_at": "2026-08-18T18:38:57+00:00",
+    "input": {
+        "sample_id": "opt_diet",
+        "pages": 0,
+        "pipeline": "autoopt"
+    },
+    "ok": true,
+    "doc_type": "autoopt",
+    "result": {
+        "doc_type": "autoopt",
+        "title": "AutoOpt (arXiv:2510.21436) harness",
+        "latex": "minimize 50*x + 80*y\nsubject to\n2*x + y >= 8\nx + 2*y >= 6\nx >= 0\ny >= 0",
+        "program": {
+            "sense": "min",
+            "objective": {
+                "x": 50.0,
+                "y": 80.0
+            },
+            "quadratic": {},
+            "constraints": [
+                {
+                    "coeffs": {
+                        "x": 2.0,
+                        "y": 1.0
+                    },
+                    "op": ">=",
+                    "rhs": 8.0
+                },
+                {
+                    "coeffs": {
+                        "x": 1.0,
+                        "y": 2.0
+                    },
+                    "op": ">=",
+                    "rhs": 6.0
+                },
+                {
+                    "coeffs": {
+                        "x": 1.0
+                    },
+                    "op": ">=",
+                    "rhs": 0.0
+                },
+                {
+                    "coeffs": {
+                        "y": 1.0
+                    },
+                    "op": ">=",
+                    "rhs": 0.0
+                }
+            ],
+            "variables": [
+                "x",
+                "y"
+            ],
+            "latex": "minimize 50*x + 80*y\nsubject to\n2*x + y >= 8\nx + 2*y >= 6\nx >= 0\ny >= 0"
+        },
+        "solution": {
+            "x": {
+                "x": 3.333333,
+                "y": 1.333333
+            },
+            "objective": 273.333333,
+            "status": "optimal",
+            "method": "vertex-lp",
+            "vertices_tested": 3
+        },
+        "validation": {
+            "ok": true,
+            "retried": false,
+            "checkpoint": "latex \u2192 structured program"
+        },
+        "pages": 1
+    },
+    "stages": [
+        {
+            "name": "ingest",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "pages": 1,
+                "chars": 71,
+                "has_image": false,
+                "source": "text"
+            }
+        },
+        {
+            "name": "preprocess",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "deskew": "identity",
+                "note": "text path skips image preprocess"
+            }
+        },
+        {
+            "name": "mer",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "latex": "minimize 50*x + 80*y\nsubject to\n2*x + y >= 8\nx + 2*y >= 6\nx >= 0\ny >= 0",
+                "source": "text",
+                "chars": 71
+            }
+        },
+        {
+            "name": "compile",
+            "ok": true,
+            "ms": 0.04,
+            "detail": {
+                "sense": "min",
+                "variables": [
+                    "x",
+                    "y"
+                ],
+                "constraints": 4,
+                "quadratic": [],
+                "retried": false
+            }
+        },
+        {
+            "name": "validate",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "ok": true,
+                "retried": false,
+                "checkpoint": "latex \u2192 structured program"
+            }
+        },
+        {
+            "name": "solve",
+            "ok": true,
+            "ms": 0.02,
+            "detail": {
+                "status": "optimal",
+                "method": "vertex-lp",
+                "objective": 273.333333,
+                "x": {
+                    "x": 3.333333,
+                    "y": 1.333333
+                }
+            }
+        }
+    ],
+    "latency_ms": 0.06,
+    "cost": {
+        "unit": "cpu_ms",
+        "total": 0.06,
+        "by_stage": {
+            "ingest": 0.0,
+            "preprocess": 0.0,
+            "mer": 0.0,
+            "compile": 0.04,
+            "validate": 0.0,
+            "solve": 0.02
+        }
+    }
+}

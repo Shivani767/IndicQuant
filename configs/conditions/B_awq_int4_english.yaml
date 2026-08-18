@@ -1,0 +1,35 @@
+# Condition B — AWQ INT4, English calibration.
+#
+# THIS IS STANDARD PRACTICE. It is what a practitioner running INT4 Sarvam today actually
+# does. The project's central claim is that this condition silently discards the model's
+# reason for existing.
+
+id: B
+name: awq_int4_english
+method: awq
+bits: 4
+calibration: english_c4
+
+model: sarvam-30b
+backend: llmcompressor
+
+quantization:
+  scheme: W4A16
+  group_size: 128
+  symmetric: true
+  targets: [Linear]
+  # Kept at full precision:
+  #   lm_head  — standard practice, quantizing it costs accuracy for negligible savings
+  #   gate     — the router. Default-preserved; Condition I flips this.
+  #   shared_experts — always active for every token, so error here hits every token
+  ignore:
+    - lm_head
+    - "re:.*mlp.gate$"
+    - "re:.*shared_experts.*"
+  calibrate_all_experts: true    # llm-compressor default; Condition H flips this
+
+role: "Standard practice. The baseline-to-beat."
+compare_against: [A, E]          # B vs. E is the money comparison
+answers: [RQ1, RQ2, RQ3, RQ4]
+
+capture_routing: true

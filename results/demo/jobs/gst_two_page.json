@@ -1,0 +1,114 @@
+{
+    "id": "cb6d23227dcf",
+    "status": "done",
+    "created_at": "2026-08-18T18:38:57+00:00",
+    "input": {
+        "sample_id": "gst_two_page",
+        "pages": 2,
+        "pipeline": null
+    },
+    "ok": true,
+    "doc_type": "gst_invoice",
+    "result": {
+        "doc_type": "gst_invoice",
+        "title": "GST tax invoice",
+        "fields": {
+            "gstin": "29AAAAA0000A1Z5",
+            "invoice_no": "INV-77",
+            "date": "18/08/2026",
+            "bill_to": "CRED SAMPLE",
+            "taxable": 2000.0,
+            "cgst": 180.0,
+            "sgst": 180.0,
+            "total": 2360.0
+        },
+        "confidence": {
+            "gstin": 1.0,
+            "invoice_no": 1.0,
+            "date": 1.0,
+            "bill_to": 1.0,
+            "taxable": 1.0,
+            "cgst": 1.0,
+            "sgst": 1.0,
+            "total": 1.0
+        },
+        "validation": {
+            "ok": true,
+            "missing": [],
+            "errors": []
+        },
+        "pages": 2
+    },
+    "stages": [
+        {
+            "name": "ingest",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "pages": 2,
+                "chars": 172
+            }
+        },
+        {
+            "name": "split",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "fanout": 2
+            }
+        },
+        {
+            "name": "preprocess",
+            "ok": true,
+            "ms": 0.01,
+            "detail": {
+                "script": [
+                    "Latin",
+                    "Latin"
+                ],
+                "deskew": "identity"
+            }
+        },
+        {
+            "name": "infer",
+            "ok": true,
+            "ms": 0.07,
+            "detail": {
+                "doc_type": "gst_invoice",
+                "pages": 2
+            }
+        },
+        {
+            "name": "validate",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "ok": true,
+                "missing": [],
+                "errors": []
+            }
+        },
+        {
+            "name": "assemble",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "fields": 8,
+                "ok": true
+            }
+        }
+    ],
+    "latency_ms": 0.08,
+    "cost": {
+        "unit": "cpu_ms",
+        "total": 0.08,
+        "by_stage": {
+            "ingest": 0.0,
+            "split": 0.0,
+            "preprocess": 0.01,
+            "infer": 0.07,
+            "validate": 0.0,
+            "assemble": 0.0
+        }
+    }
+}

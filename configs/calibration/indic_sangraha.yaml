@@ -1,0 +1,36 @@
+# Condition E calibration: Indic-only. B vs. E is the money comparison.
+#
+# Language weighting is UNIFORM across the 11 Indic languages, deliberately. Weighting by
+# pretraining share would reproduce the very imbalance we are testing against; uniform
+# weighting is the intervention. RQ5 asks whether this transfers to languages not in the
+# calibration set, so the sweep must not quietly include all of them at full weight.
+
+name: indic_sangraha
+description: "Indic-only calibration, uniform across languages"
+
+token_budget: 1048576            # identical to english_c4 — see that file's invariant note
+seq_len: 2048
+seed: 0
+
+sources:
+  - hf_id: ai4bharat/sangraha
+    config: verified
+    split: train
+    text_field: text
+    weight: 1.0
+    languages: [hi, bn, ta, te, mr, gu, kn, pa, or, as]
+
+# Held-out languages: excluded from calibration so RQ5 (cross-language transfer) is
+# answerable. If Indic calibration on 10 languages recovers capability on an 11th that was
+# never calibrated, the fix generalizes rather than memorizes.
+holdout_languages: [ml]
+
+language_weighting: uniform
+
+filters:
+  min_chars: 200
+  max_chars: 100000
+  dedup: exact
+  script_purity: 0.8             # drop docs <80% in the expected script — sangraha's
+                                 # web-crawled splits carry English boilerplate that would
+                                 # silently make this a mixed corpus

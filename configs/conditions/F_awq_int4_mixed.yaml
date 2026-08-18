@@ -1,0 +1,40 @@
+# Condition F — AWQ INT4, mixed calibration. Tests H3.
+#
+# Pure-Indic calibration (E) may recover Indic capability by trading English away. A model
+# Sarvam actually ships must serve both, so a mixed corpus that beats both pure corpora is
+# the practically shippable result — and the one that goes on the Hugging Face model card.
+
+id: F
+name: awq_int4_mixed
+method: awq
+bits: 4
+calibration: mixed
+
+model: sarvam-30b
+backend: llmcompressor
+
+quantization:
+  scheme: W4A16
+  group_size: 128
+  symmetric: true
+  targets: [Linear]
+  ignore:
+    - lm_head
+    - "re:.*mlp.gate$"
+    - "re:.*shared_experts.*"
+  calibrate_all_experts: true
+
+role: "H3 — mixed should beat either pure corpus. The shippable recipe."
+compare_against: [A, B, E]
+answers: [RQ1, RQ2, RQ3, RQ5]
+
+capture_routing: true
+
+# Phase 3 sweeps calibration.mixture_sweep and picks the release checkpoint from it.
+# The selection criterion is fixed in advance to avoid tuning on the headline metric:
+# maximize mean Indic Δ subject to English Δ staying within tolerance of FP16.
+release_candidate: true
+selection_criterion:
+  maximize: mean_indic_delta
+  subject_to:
+    english_delta_max_regression: 0.01

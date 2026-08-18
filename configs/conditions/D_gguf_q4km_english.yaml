@@ -1,0 +1,34 @@
+# Condition D — GGUF Q4_K_M.
+#
+# Deployment reality check. GGUF/llama.cpp is how quantized models actually reach laptops
+# and edge devices in India, and Sarvam already ships sarvam-30b-gguf. Including it keeps
+# the finding connected to what people run rather than to what researchers benchmark.
+#
+# Note: Q4_K_M's k-quants use importance data from an imatrix rather than AWQ/GPTQ-style
+# calibration. The "calibration language" lever here is the imatrix corpus. This is a
+# different mechanism reaching the same question, which makes it a genuinely independent
+# test rather than a restatement.
+
+id: D
+name: gguf_q4km_english
+method: gguf
+bits: 4
+calibration: english_c4
+
+model: sarvam-30b
+backend: llama_cpp
+
+quantization:
+  gguf_type: Q4_K_M
+  use_imatrix: true
+  imatrix_calibration: english_c4    # the lever; swap to indic_sangraha for the E-analogue
+
+role: "Deployment reality check — the path users actually run."
+compare_against: [A, B]
+answers: [RQ1, RQ2, RQ3]
+
+# llama.cpp replaces the MoE block with its own kernels, so Python gate hooks do not fire.
+# Routing analysis is not available here — recorded explicitly so nobody later mistakes an
+# empty trace for a null result.
+capture_routing: false
+routing_unavailable_reason: "llama.cpp fuses the MoE block; SarvamMoEGate is not a live Python module"

@@ -1,0 +1,108 @@
+[
+  {
+    "id": "opt_lp2",
+    "pipeline": "autoopt",
+    "doc_type": "autoopt",
+    "language": "en",
+    "text": "maximize 3*x + 4*y\nsubject to\nx + 2*y <= 8\n3*x + y <= 9\nx >= 0\ny >= 0",
+    "expected": {
+      "objective": 18.0,
+      "x": {"x": 2.0, "y": 3.0}
+    }
+  },
+  {
+    "id": "opt_diet",
+    "pipeline": "autoopt",
+    "doc_type": "autoopt",
+    "language": "en",
+    "text": "minimize 50*x + 80*y\nsubject to\n2*x + y >= 8\nx + 2*y >= 6\nx >= 0\ny >= 0",
+    "expected": {
+      "objective": 273.333333,
+      "x": {"x": 3.333333, "y": 1.333333}
+    }
+  },
+  {
+    "id": "opt_latex",
+    "pipeline": "autoopt",
+    "doc_type": "autoopt",
+    "language": "en",
+    "text": "\\min 3x + 2y\ns.t. x + y \\ge 4\nx \\ge 0\ny \\ge 0",
+    "expected": {
+      "objective": 8.0,
+      "x": {"x": 0.0, "y": 4.0}
+    }
+  },
+  {
+    "id": "opt_bobd",
+    "pipeline": "autoopt",
+    "doc_type": "autoopt",
+    "language": "en",
+    "text": "minimize p - q^2\nsubject to\np + q <= 1\np >= 0\nq >= 0",
+    "expected": {
+      "objective": -1.0,
+      "x": {"p": 0.0, "q": 1.0}
+    }
+  },
+  {
+    "id": "opt_bobd3",
+    "pipeline": "autoopt",
+    "doc_type": "autoopt",
+    "language": "en",
+    "text": "minimize x + 2*y + 3*z\nsubject to\nx + y + z >= 3\nx >= 0\ny >= 0\nz >= 0\nx <= 5\ny <= 5\nz <= 5",
+    "expected": {
+      "objective": 3.0,
+      "x": {"x": 3.0, "y": 0.0, "z": 0.0}
+    }
+  },
+  {
+    "id": "opt_eq",
+    "pipeline": "autoopt",
+    "doc_type": "autoopt",
+    "language": "en",
+    "text": "minimize x + y\nsubject to\nx + y = 5\nx >= 1\ny >= 1",
+    "expected": {
+      "objective": 5.0,
+      "x": {"x": 1.0, "y": 4.0}
+    }
+  },
+  {
+    "id": "opt_joint",
+    "pipeline": "autoopt",
+    "doc_type": "autoopt",
+    "language": "en",
+    "text": "maximize x + 2*y\ns.t. x + y <= 3, x, y >= 0",
+    "expected": {
+      "objective": 6.0,
+      "x": {"x": 0.0, "y": 3.0}
+    }
+  },
+  {
+    "id": "opt_max1d",
+    "pipeline": "autoopt",
+    "doc_type": "autoopt",
+    "language": "en",
+    "text": "maximize 5*x\nsubject to\nx <= 4\nx >= 0",
+    "expected": {
+      "objective": 20.0,
+      "x": {"x": 4.0}
+    }
+  },
+  {
+    "id": "opt_incomplete",
+    "pipeline": "autoopt",
+    "doc_type": "autoopt",
+    "language": "en",
+    "text": "this whiteboard photo has no min or constraints",
+    "expect_ok": false,
+    "fail_stage": "compile"
+  },
+  {
+    "id": "opt_infeasible",
+    "pipeline": "autoopt",
+    "doc_type": "autoopt",
+    "language": "en",
+    "text": "maximize x\nsubject to\nx <= 1\nx >= 2",
+    "expect_ok": false,
+    "fail_stage": "solve"
+  }
+]

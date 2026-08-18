@@ -1,0 +1,20 @@
+# Condition A — FP16 baseline. Every Δ in the project is measured against this, and every
+# routing comparison uses this as the reference trace.
+
+id: A
+name: fp16_baseline
+method: none
+bits: 16
+calibration: null
+
+model: sarvam-30b
+dtype: bfloat16                  # checkpoint ships fp32; cast on load. bf16 not fp16:
+                                 # the model was trained in bf16 and fp16 risks overflow
+                                 # in the fp32 router path.
+
+role: "Baseline. Reference for all Δ-accuracy and all routing agreement."
+answers: [RQ1, RQ2, RQ3, RQ4, RQ5]
+
+# Routing traces from this condition are the reference side of every topk_agreement() call,
+# so they must be captured on exactly the token sequences later conditions replay.
+capture_routing: true

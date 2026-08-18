@@ -1,0 +1,39 @@
+# Condition E — AWQ INT4, Indic calibration.
+#
+# THE MONEY COMPARISON. Method, bit-width, group size, sequence length and total token
+# budget are all identical to Condition B. The ONLY difference is the calibration
+# distribution.
+#
+# If E beats B on Indic tasks at identical bit-width, the fix is free: change the
+# calibration corpus, keep the deployment cost. That is the finding.
+
+id: E
+name: awq_int4_indic
+method: awq
+bits: 4
+calibration: indic_sangraha      # <-- the only line that differs from B
+
+model: sarvam-30b
+backend: llmcompressor
+
+quantization:
+  scheme: W4A16
+  group_size: 128
+  symmetric: true
+  targets: [Linear]
+  ignore:
+    - lm_head
+    - "re:.*mlp.gate$"
+    - "re:.*shared_experts.*"
+  calibrate_all_experts: true
+
+role: "The fix. Identical to B except calibration distribution."
+compare_against: [A, B]
+answers: [RQ1, RQ2, RQ3, RQ4, RQ5]
+
+capture_routing: true
+
+# RQ5 — does the fix transfer? Malayalam is held out of indic_sangraha calibration
+# (see that config). Recovery on a language never calibrated on means the fix generalizes
+# rather than memorizes.
+transfer_test_languages: [ml]

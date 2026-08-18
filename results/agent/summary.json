@@ -1,0 +1,51 @@
+{
+  "n": 50,
+  "policies": {
+    "english_only": {
+      "n": 25,
+      "success": 0.44,
+      "success_ci": "0.4400 [0.2400, 0.6400] (95% CI, n=25)",
+      "by_language": {
+        "en": 1.0,
+        "hi": 0.0,
+        "hi_en": 0.8,
+        "or": 0.2,
+        "ta": 0.2
+      },
+      "by_family": {
+        "book_ticket": 0.4,
+        "form_submit": 0.2,
+        "gst_calc": 0.8,
+        "menu_bill": 0.4,
+        "receipt_pay": 0.4
+      },
+      "mean_steps": 1.72
+    },
+    "indic_aware": {
+      "n": 25,
+      "success": 1.0,
+      "success_ci": "1.0000 [1.0000, 1.0000] (95% CI, n=25)",
+      "by_language": {
+        "en": 1.0,
+        "hi": 1.0,
+        "hi_en": 1.0,
+        "or": 1.0,
+        "ta": 1.0
+      },
+      "by_family": {
+        "book_ticket": 1.0,
+        "form_submit": 1.0,
+        "gst_calc": 1.0,
+        "menu_bill": 1.0,
+        "receipt_pay": 1.0
+      },
+      "mean_steps": 2.4
+    }
+  },
+  "gap": {
+    "delta_success": 0.56,
+    "ci": "0.5600 [0.3600, 0.7600] (95% CI, n=25)",
+    "p_value": 0.00019998000199980003,
+    "significant": true
+  }
+}

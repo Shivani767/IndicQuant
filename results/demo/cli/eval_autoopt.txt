@@ -1,0 +1,11 @@
+               indicquant eval — autoopt                
+┏━━━━━━━━━━━┳━━━━━┳━━━━━━━━━━━┳━━━━━━━━┳━━━━━━┳━━━━━━━━┓
+┃ id        ┃ ok  ┃ method    ┃ fields ┃ ms   ┃ errors ┃
+┡━━━━━━━━━━━╇━━━━━╇━━━━━━━━━━━╇━━━━━━━━╇━━━━━━╇━━━━━━━━┩
+│ opt_lp2   │ yes │ vertex-lp │ 1.0    │ 0.22 │        │
+│ opt_diet  │ yes │ vertex-lp │ 1.0    │ 0.04 │        │
+│ opt_latex │ yes │ vertex-lp │ 1.0    │ 0.03 │        │
+│ opt_bobd  │ yes │ bobd-grid │ 1.0    │ 0.12 │        │
+│ opt_bobd3 │ yes │ bobd-grid │ 1.0    │ 0.65 │        │
+└───────────┴─────┴───────────┴────────┴──────┴────────┘
+task_completion_rate=1.0  field_accuracy_mean=1.0  latency_ms_mean=0.21

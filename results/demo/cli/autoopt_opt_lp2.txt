@@ -1,0 +1,15 @@
+33b8292eafb7  autoopt  0.19ms  ok=True
+  ingest           0.0 ms  ok
+  preprocess       0.0 ms  ok
+  mer              0.0 ms  ok
+  compile         0.17 ms  ok
+  validate         0.0 ms  ok
+  solve           0.02 ms  ok
+  method=vertex-lp  objective=18.0  x={'x': 2.0, 'y': 3.0}
+M1 checkpoint (LaTeX/text)
+maximize 3*x + 4*y
+subject to
+x + 2*y <= 8
+3*x + y <= 9
+x >= 0
+y >= 0

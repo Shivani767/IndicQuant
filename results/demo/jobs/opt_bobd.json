@@ -1,0 +1,159 @@
+{
+    "id": "ad664e0f145b",
+    "status": "done",
+    "created_at": "2026-08-18T18:38:58+00:00",
+    "input": {
+        "sample_id": "opt_bobd",
+        "pages": 0,
+        "pipeline": "autoopt"
+    },
+    "ok": true,
+    "doc_type": "autoopt",
+    "result": {
+        "doc_type": "autoopt",
+        "title": "AutoOpt (arXiv:2510.21436) harness",
+        "latex": "minimize p - q^2\nsubject to\np + q <= 1\np >= 0\nq >= 0",
+        "program": {
+            "sense": "min",
+            "objective": {
+                "p": 1.0
+            },
+            "quadratic": {
+                "q": -1.0
+            },
+            "constraints": [
+                {
+                    "coeffs": {
+                        "p": 1.0,
+                        "q": 1.0
+                    },
+                    "op": "<=",
+                    "rhs": 1.0
+                },
+                {
+                    "coeffs": {
+                        "p": 1.0
+                    },
+                    "op": ">=",
+                    "rhs": 0.0
+                },
+                {
+                    "coeffs": {
+                        "q": 1.0
+                    },
+                    "op": ">=",
+                    "rhs": 0.0
+                }
+            ],
+            "variables": [
+                "p",
+                "q"
+            ],
+            "latex": "minimize p - q^2\nsubject to\np + q <= 1\np >= 0\nq >= 0"
+        },
+        "solution": {
+            "x": {
+                "p": 0.0,
+                "q": 1.0
+            },
+            "objective": -1.0,
+            "status": "optimal",
+            "method": "bobd-grid",
+            "complicating": "q",
+            "grid": 41,
+            "feasible_samples": 3
+        },
+        "validation": {
+            "ok": true,
+            "retried": false,
+            "checkpoint": "latex \u2192 structured program"
+        },
+        "pages": 1
+    },
+    "stages": [
+        {
+            "name": "ingest",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "pages": 1,
+                "chars": 52,
+                "has_image": false,
+                "source": "text"
+            }
+        },
+        {
+            "name": "preprocess",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "deskew": "identity",
+                "note": "text path skips image preprocess"
+            }
+        },
+        {
+            "name": "mer",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "latex": "minimize p - q^2\nsubject to\np + q <= 1\np >= 0\nq >= 0",
+                "source": "text",
+                "chars": 52
+            }
+        },
+        {
+            "name": "compile",
+            "ok": true,
+            "ms": 0.04,
+            "detail": {
+                "sense": "min",
+                "variables": [
+                    "p",
+                    "q"
+                ],
+                "constraints": 3,
+                "quadratic": [
+                    "q"
+                ],
+                "retried": false
+            }
+        },
+        {
+            "name": "validate",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "ok": true,
+                "retried": false,
+                "checkpoint": "latex \u2192 structured program"
+            }
+        },
+        {
+            "name": "solve",
+            "ok": true,
+            "ms": 0.17,
+            "detail": {
+                "status": "optimal",
+                "method": "bobd-grid",
+                "objective": -1.0,
+                "x": {
+                    "p": 0.0,
+                    "q": 1.0
+                }
+            }
+        }
+    ],
+    "latency_ms": 0.21,
+    "cost": {
+        "unit": "cpu_ms",
+        "total": 0.21,
+        "by_stage": {
+            "ingest": 0.0,
+            "preprocess": 0.0,
+            "mer": 0.0,
+            "compile": 0.04,
+            "validate": 0.0,
+            "solve": 0.17
+        }
+    }
+}

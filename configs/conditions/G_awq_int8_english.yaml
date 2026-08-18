@@ -1,0 +1,38 @@
+# Condition G — AWQ INT8, English calibration. Bit-width ablation.
+#
+# H1 predicts the degradation curve steepens as bit-width falls. If the English-vs-Indic
+# gap is large at INT4 and near-zero at INT8, the mechanism is quantization error
+# interacting with calibration mismatch, exactly as claimed. If the gap is the same at both
+# widths, something else is going on and the story needs rethinking.
+#
+# This is the condition that turns a single measurement into a trend.
+
+id: G
+name: awq_int8_english
+method: awq
+bits: 8
+calibration: english_c4
+
+model: sarvam-30b
+backend: llmcompressor
+
+quantization:
+  scheme: W8A16
+  group_size: 128
+  symmetric: true
+  targets: [Linear]
+  ignore:
+    - lm_head
+    - "re:.*mlp.gate$"
+    - "re:.*shared_experts.*"
+  calibrate_all_experts: true
+
+role: "Bit-width ablation — does the gap widen as bits fall?"
+compare_against: [A, B]
+answers: [RQ1, RQ2]
+
+capture_routing: true
+
+# Optional INT8 Indic counterpart, run only if G shows a measurable gap worth resolving.
+# Deferred rather than dropped: it doubles the ablation cost for a secondary question.
+paired_indic_variant: awq_int8_indic

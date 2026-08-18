@@ -1,0 +1,56 @@
+# Romanized code-mixed calibration corpus. CONSTRUCTED, not downloaded.
+#
+# No canonical romanized Hinglish/Tanglish corpus of the needed scale exists (checked HF
+# 2026-08-18: cmu_hinglish_dog, LinCE and similar are small and mostly classification-
+# oriented). Building this is a contribution in itself, as the spec anticipated.
+#
+# It also serves double duty as the script confound control (ARCHITECTURE.md §6.2): it is
+# Indic *language* in Latin *script*, so expert specialization that survives here is
+# specialization on language rather than on codepoints.
+
+name: codemixed
+description: "Constructed romanized Hinglish/Tanglish calibration corpus"
+
+token_budget: 1048576            # identical to english_c4 — see that file's invariant note
+seq_len: 2048
+seed: 0
+
+# Two construction routes, blended. Natural text is preferred but scarce; transliteration
+# fills the gap. The ratio is recorded in the manifest because transliterated text is
+# distributionally cleaner than how people actually type, and that caveat must travel with
+# any result computed on this corpus.
+construction:
+  natural:
+    weight: 0.4
+    sources:
+      - hf_id: festvox/cmu_hinglish_dog
+        split: train
+        text_field: null         # TODO: pin field after inspecting the loaded schema
+        language: hi_en
+      - hf_id: lince-benchmark/lince
+        config: null             # TODO: select the hineng subsets
+        language: hi_en
+
+  transliterated:
+    weight: 0.6
+    # Transliterate native-script Indic text to Latin, then inject English tokens at a
+    # realistic rate to approximate code-switching.
+    source:
+      hf_id: ai4bharat/sangraha
+      config: verified
+      languages: [hi, ta]
+    transliteration:
+      hf_id: ai4bharat/Aksharantar    # word-level native→Latin mappings
+      direction: native_to_latin
+    english_injection_rate: 0.15      # fraction of tokens left/replaced as English
+
+filters:
+  min_chars: 100                 # lower than other corpora: code-mixed text runs shorter
+  max_chars: 50000
+  dedup: exact
+  # No script_purity filter — Latin script is the whole point here.
+
+caveats:
+  - "Transliterated text is cleaner than organic typing (no spelling variation, consistent
+     romanization scheme). Any result on this corpus must report the natural/transliterated
+     ratio alongside it."

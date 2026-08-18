@@ -1,0 +1,46 @@
+# Condition F calibration: mixed. Tests H3 — a mixed corpus should beat either pure corpus,
+# because the model must serve both English and Indic at deployment. A pure-Indic corpus
+# risks trading English capability away, which would make the fix unshippable.
+#
+# The 50/35/15 split is the starting point, not a result. Phase 3 sweeps this ratio; the
+# optimal mixture is itself a deliverable.
+
+name: mixed
+description: "Indic + English + code-mixed calibration (H3)"
+
+token_budget: 1048576            # identical to english_c4 — see that file's invariant note
+seq_len: 2048
+seed: 0
+
+sources:
+  - hf_id: ai4bharat/sangraha
+    config: verified
+    split: train
+    text_field: text
+    weight: 0.50
+    languages: [hi, bn, ta, te, mr, gu, kn, pa, or, as]
+    language_weighting: uniform
+
+  - hf_id: allenai/c4
+    config: en
+    split: train
+    text_field: text
+    weight: 0.35
+    language: en
+
+  - local: data/calib/codemixed          # built by `indicquant calib build codemixed`
+    weight: 0.15
+    languages: [hi_en, ta_en]
+
+filters:
+  min_chars: 200
+  max_chars: 100000
+  dedup: exact
+
+# Phase 3 mixture ablation: re-run F at each of these Indic:English:code-mixed splits.
+mixture_sweep:
+  - [0.80, 0.15, 0.05]
+  - [0.65, 0.25, 0.10]
+  - [0.50, 0.35, 0.15]           # default above
+  - [0.35, 0.50, 0.15]
+  - [0.20, 0.70, 0.10]

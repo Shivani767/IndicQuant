@@ -1,0 +1,105 @@
+{
+    "suite": "documents",
+    "cases": 6,
+    "task_completion_rate": 1.0,
+    "field_accuracy_mean": 1.0,
+    "latency_ms_mean": 0.09,
+    "scores": [
+        {
+            "id": "pan_hi",
+            "ok": true,
+            "doc_type": "pan",
+            "field_accuracy": 1.0,
+            "latency_ms": 0.19,
+            "errors": [],
+            "stages": [
+                "ingest",
+                "split",
+                "preprocess",
+                "infer",
+                "validate",
+                "assemble"
+            ]
+        },
+        {
+            "id": "aadhaar_hi",
+            "ok": true,
+            "doc_type": "aadhaar",
+            "field_accuracy": 1.0,
+            "latency_ms": 0.06,
+            "errors": [],
+            "stages": [
+                "ingest",
+                "split",
+                "preprocess",
+                "infer",
+                "validate",
+                "assemble"
+            ]
+        },
+        {
+            "id": "gst_invoice_en",
+            "ok": true,
+            "doc_type": "gst_invoice",
+            "field_accuracy": 1.0,
+            "latency_ms": 0.06,
+            "errors": [],
+            "stages": [
+                "ingest",
+                "split",
+                "preprocess",
+                "infer",
+                "validate",
+                "assemble"
+            ]
+        },
+        {
+            "id": "bank_en",
+            "ok": true,
+            "doc_type": "bank_statement",
+            "field_accuracy": 1.0,
+            "latency_ms": 0.05,
+            "errors": [],
+            "stages": [
+                "ingest",
+                "split",
+                "preprocess",
+                "infer",
+                "validate",
+                "assemble"
+            ]
+        },
+        {
+            "id": "insurance_en",
+            "ok": true,
+            "doc_type": "insurance",
+            "field_accuracy": 1.0,
+            "latency_ms": 0.03,
+            "errors": [],
+            "stages": [
+                "ingest",
+                "split",
+                "preprocess",
+                "infer",
+                "validate",
+                "assemble"
+            ]
+        },
+        {
+            "id": "gst_two_page",
+            "ok": true,
+            "doc_type": "gst_invoice",
+            "field_accuracy": 1.0,
+            "latency_ms": 0.13,
+            "errors": [],
+            "stages": [
+                "ingest",
+                "split",
+                "preprocess",
+                "infer",
+                "validate",
+                "assemble"
+            ]
+        }
+    ]
+}

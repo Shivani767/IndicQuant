@@ -1,0 +1,190 @@
+{
+    "id": "3bc2558b522e",
+    "status": "done",
+    "created_at": "2026-08-18T18:38:58+00:00",
+    "input": {
+        "sample_id": "opt_bobd3",
+        "pages": 0,
+        "pipeline": "autoopt"
+    },
+    "ok": true,
+    "doc_type": "autoopt",
+    "result": {
+        "doc_type": "autoopt",
+        "title": "AutoOpt (arXiv:2510.21436) harness",
+        "latex": "minimize x + 2*y + 3*z\nsubject to\nx + y + z >= 3\nx >= 0\ny >= 0\nz >= 0\nx <= 5\ny <= 5\nz <= 5",
+        "program": {
+            "sense": "min",
+            "objective": {
+                "x": 1.0,
+                "y": 2.0,
+                "z": 3.0
+            },
+            "quadratic": {},
+            "constraints": [
+                {
+                    "coeffs": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "op": ">=",
+                    "rhs": 3.0
+                },
+                {
+                    "coeffs": {
+                        "x": 1.0
+                    },
+                    "op": ">=",
+                    "rhs": 0.0
+                },
+                {
+                    "coeffs": {
+                        "y": 1.0
+                    },
+                    "op": ">=",
+                    "rhs": 0.0
+                },
+                {
+                    "coeffs": {
+                        "z": 1.0
+                    },
+                    "op": ">=",
+                    "rhs": 0.0
+                },
+                {
+                    "coeffs": {
+                        "x": 1.0
+                    },
+                    "op": "<=",
+                    "rhs": 5.0
+                },
+                {
+                    "coeffs": {
+                        "y": 1.0
+                    },
+                    "op": "<=",
+                    "rhs": 5.0
+                },
+                {
+                    "coeffs": {
+                        "z": 1.0
+                    },
+                    "op": "<=",
+                    "rhs": 5.0
+                }
+            ],
+            "variables": [
+                "x",
+                "y",
+                "z"
+            ],
+            "latex": "minimize x + 2*y + 3*z\nsubject to\nx + y + z >= 3\nx >= 0\ny >= 0\nz >= 0\nx <= 5\ny <= 5\nz <= 5"
+        },
+        "solution": {
+            "x": {
+                "x": 3.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "objective": 3.0,
+            "status": "optimal",
+            "method": "bobd-grid",
+            "complicating": "z",
+            "grid": 41,
+            "feasible_samples": 41
+        },
+        "validation": {
+            "ok": true,
+            "retried": false,
+            "checkpoint": "latex \u2192 structured program"
+        },
+        "pages": 1
+    },
+    "stages": [
+        {
+            "name": "ingest",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "pages": 1,
+                "chars": 90,
+                "has_image": false,
+                "source": "text"
+            }
+        },
+        {
+            "name": "preprocess",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "deskew": "identity",
+                "note": "text path skips image preprocess"
+            }
+        },
+        {
+            "name": "mer",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "latex": "minimize x + 2*y + 3*z\nsubject to\nx + y + z >= 3\nx >= 0\ny >= 0\nz >= 0\nx <= 5\ny <= 5\nz <= 5",
+                "source": "text",
+                "chars": 90
+            }
+        },
+        {
+            "name": "compile",
+            "ok": true,
+            "ms": 0.06,
+            "detail": {
+                "sense": "min",
+                "variables": [
+                    "x",
+                    "y",
+                    "z"
+                ],
+                "constraints": 7,
+                "quadratic": [],
+                "retried": false
+            }
+        },
+        {
+            "name": "validate",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "ok": true,
+                "retried": false,
+                "checkpoint": "latex \u2192 structured program"
+            }
+        },
+        {
+            "name": "solve",
+            "ok": true,
+            "ms": 0.73,
+            "detail": {
+                "status": "optimal",
+                "method": "bobd-grid",
+                "objective": 3.0,
+                "x": {
+                    "x": 3.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            }
+        }
+    ],
+    "latency_ms": 0.79,
+    "cost": {
+        "unit": "cpu_ms",
+        "total": 0.79,
+        "by_stage": {
+            "ingest": 0.0,
+            "preprocess": 0.0,
+            "mer": 0.0,
+            "compile": 0.06,
+            "validate": 0.0,
+            "solve": 0.73
+        }
+    }
+}

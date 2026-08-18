@@ -1,0 +1,105 @@
+{
+    "id": "af55e386edeb",
+    "status": "done",
+    "created_at": "2026-08-18T18:38:57+00:00",
+    "input": {
+        "sample_id": "aadhaar_hi",
+        "pages": 1,
+        "pipeline": null
+    },
+    "ok": true,
+    "doc_type": "aadhaar",
+    "result": {
+        "doc_type": "aadhaar",
+        "title": "Aadhaar (sample IDs only)",
+        "fields": {
+            "aadhaar": "9999 1111 2222",
+            "name": "\u0905\u0928\u093f\u0924\u093e \u0936\u0930\u094d\u092e\u093e",
+            "dob": "15/08/1990",
+            "gender": "F"
+        },
+        "confidence": {
+            "aadhaar": 1.0,
+            "name": 1.0,
+            "dob": 1.0,
+            "gender": 1.0
+        },
+        "validation": {
+            "ok": true,
+            "missing": [],
+            "errors": []
+        },
+        "pages": 1
+    },
+    "stages": [
+        {
+            "name": "ingest",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "pages": 1,
+                "chars": 151
+            }
+        },
+        {
+            "name": "split",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "fanout": 1
+            }
+        },
+        {
+            "name": "preprocess",
+            "ok": true,
+            "ms": 0.01,
+            "detail": {
+                "script": [
+                    "Devanagari"
+                ],
+                "deskew": "identity"
+            }
+        },
+        {
+            "name": "infer",
+            "ok": true,
+            "ms": 0.03,
+            "detail": {
+                "doc_type": "aadhaar",
+                "pages": 1
+            }
+        },
+        {
+            "name": "validate",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "ok": true,
+                "missing": [],
+                "errors": []
+            }
+        },
+        {
+            "name": "assemble",
+            "ok": true,
+            "ms": 0.0,
+            "detail": {
+                "fields": 4,
+                "ok": true
+            }
+        }
+    ],
+    "latency_ms": 0.04,
+    "cost": {
+        "unit": "cpu_ms",
+        "total": 0.04,
+        "by_stage": {
+            "ingest": 0.0,
+            "split": 0.0,
+            "preprocess": 0.01,
+            "infer": 0.03,
+            "validate": 0.0,
+            "assemble": 0.0
+        }
+    }
+}

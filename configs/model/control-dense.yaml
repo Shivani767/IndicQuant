@@ -1,0 +1,35 @@
+# Dense multilingual control.
+#
+# Essential, not optional: without a dense control, RQ4 is unfalsifiable. Any routing-drift
+# effect must be shown to be MoE-specific rather than a generic multilingual quantization
+# effect that would appear in any model.
+#
+# Selection criteria: dense, genuinely multilingual with Indic coverage, small enough that
+# the full condition sweep costs a fraction of sarvam-30b, permissively licensed.
+#
+# VERIFY the exact model ID and its Indic coverage on Hugging Face before Phase 1 — this
+# choice is deliberately deferred and must not be locked in from memory.
+
+name: control-dense
+hf_id: null                      # TODO(Phase 1): pin after verifying on HF
+revision: main
+trust_remote_code: false
+license: null
+
+architecture:
+  model_type: null
+  is_moe: false                  # the point of this control
+
+module_names:
+  layers_path: model.layers
+  attention_qkv: null            # standard q_proj/k_proj/v_proj expected; verify
+  attention_out: o_proj
+  dense_mlp: mlp
+
+# Which questions this model answers. It cannot answer RQ4 (no router) — that is precisely
+# its role: it establishes the dense baseline against which MoE-specific effects are measured.
+answers_research_questions: [RQ1, RQ2, RQ3, RQ5]
+
+footprint:
+  disk_bf16_gb: null
+  min_gpu_memory_gb: null

@@ -1,0 +1,36 @@
+# Condition C — GPTQ INT4, English calibration.
+#
+# Method generalization. If the calibration-language gap appears under AWQ but not GPTQ,
+# the finding is about AWQ's activation-magnitude scaling specifically, not about
+# calibration language. That would be a much weaker (though still publishable) claim, so
+# this condition is load-bearing rather than decorative.
+
+id: C
+name: gptq_int4_english
+method: gptq
+bits: 4
+calibration: english_c4
+
+model: sarvam-30b
+backend: llmcompressor           # gptqmodel available as an independent cross-check
+
+quantization:
+  scheme: W4A16
+  group_size: 128
+  symmetric: true
+  targets: [Linear]
+  ignore:
+    - lm_head
+    - "re:.*mlp.gate$"
+    - "re:.*shared_experts.*"
+  calibrate_all_experts: true
+  # GPTQ-specific
+  actorder: true                 # activation-order reordering; standard for quality
+  block_size: 128
+  dampening_frac: 0.01
+
+role: "Method generalization — is the gap AWQ-specific?"
+compare_against: [A, B]
+answers: [RQ1, RQ2, RQ3]
+
+capture_routing: true

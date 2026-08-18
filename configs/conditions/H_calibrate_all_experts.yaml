@@ -1,0 +1,66 @@
+# Condition H — routing-faithful vs. calibrate-all-experts. NOT IN THE ORIGINAL SPEC.
+#
+# WHY THIS EXISTS (ARCHITECTURE.md §2.2):
+#
+# llm-compressor's own MoE tutorial states the problem it was built to solve: with a small
+# calibration set, "some experts will not be activated, or activated very infrequently...
+# resulting in poorly calibrated quantization parameters, numerical instability, or NaNs."
+# Its fix is to route ALL tokens through ALL experts during calibration.
+#
+# That fixes the token-COUNT problem. It does not fix the LANGUAGE problem. Under English
+# calibration with calibrate_all_experts=True, a Tamil-specialized expert now receives
+# plenty of activations — all of them English. Its scales are fit precisely to a
+# distribution it will never see. The workaround silences a symptom while leaving the
+# pathology intact.
+#
+# This condition separates the two mechanisms. It is a 2x2: {English, Indic} calibration
+# x {routing-faithful, all-experts}.
+#
+#   - If the language gap persists under all-experts → distribution mismatch is the cause,
+#     and the framework's standard workaround does not save you.
+#   - If the gap collapses under all-experts → coverage starvation was the cause, and the
+#     recommendation is simply "turn the flag on", which is a useful, cheap finding.
+#
+# Either outcome is publishable, and neither has been measured.
+
+id: H
+name: calibrate_all_experts_ablation
+method: awq
+bits: 4
+
+model: sarvam-30b
+backend: llmcompressor
+
+quantization:
+  scheme: W4A16
+  group_size: 128
+  symmetric: true
+  targets: [Linear]
+  ignore:
+    - lm_head
+    - "re:.*mlp.gate$"
+    - "re:.*shared_experts.*"
+
+# The 2x2. Each cell is a separate quantization run; the CLI expands this grid.
+grid:
+  calibration: [english_c4, indic_sangraha]
+  calibrate_all_experts: [true, false]
+
+# Cells H_en_true and H_indic_true duplicate B and E respectively. The runner reuses those
+# checkpoints rather than re-quantizing — re-quantizing a 32B model is the dominant cost.
+reuse_checkpoints:
+  - match: {calibration: english_c4, calibrate_all_experts: true}
+    condition: B
+  - match: {calibration: indic_sangraha, calibrate_all_experts: true}
+    condition: E
+
+role: "NEW. Separates expert-coverage starvation from calibration-distribution mismatch."
+compare_against: [A, B, E]
+answers: [RQ4]
+
+capture_routing: true
+
+# Cheap companion diagnostic, no quantization required: count tokens-per-expert for each
+# calibration corpus under faithful routing. If English calibration starves experts that
+# Indic text relies on, H1 is predicted before any checkpoint exists.
+preflight: expert_coverage
